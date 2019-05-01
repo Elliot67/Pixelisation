@@ -1,9 +1,10 @@
 import numpy as np
+# Working without numpy ?
 import cv2
 
-name = "arbre.jpg"
+name = "dog.jpg"
 path = "img/"+name
-scale = 5 # La largeur & hauteur des nouveaux 'pixels'
+scale = 40 # La largeur & hauteur des nouveaux 'pixels'
 
 img = cv2.imread(path, cv2.IMREAD_COLOR)
 
