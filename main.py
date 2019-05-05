@@ -1,14 +1,29 @@
 import numpy as np
 # Working without numpy ?
 import cv2
+import argparse
+import math
 
-name = "dog.jpg"
-path = "img/"+name
-scale = 40 # La largeur & hauteur des nouveaux 'pixels'
+parser = argparse.ArgumentParser(description='Pixelate an image at the scale of your choice.')
+parser.add_argument('image', type=str, help='The original image file', metavar='')
+parser.add_argument('-s', '--scale', type=int, default=0, help="The number of pixel for your new pixel.", metavar='')
+parser.add_argument('-o', '--output', type=str, default=0, help="The name of the outputted image", metavar='')
+args = parser.parse_args()
 
-img = cv2.imread(path, cv2.IMREAD_COLOR)
+name = args.image
 
+if not args.output:
+	output = name.replace('.', '_pixelate.')
+else:
+	output = args.output
+
+img = cv2.imread(name, cv2.IMREAD_COLOR)
 height, width, channels = img.shape
+
+if args.scale <= 0:
+	scale = math.ceil(min(height, width)/30)
+else:
+	scale = args.scale
 
 newHeight = int(height/scale)
 newWidth = int(width/scale)
@@ -36,11 +51,10 @@ for x in range(newWidth):
 		spotB = moyenne(spotB)
 		img[y:y+scale, x:x+scale] = [spotR, spotV, spotB]
 
-cv2.imwrite('modif_'+name, img)
-cv2.imshow('modif_'+name,img)
+cv2.imwrite(output, img)
+cv2.imshow(output,img)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
-# Ajout
-# Possibilité de pixelisé les pixels non affecté (bords droits & bas)
+# TODO: Possibilité de pixelisé les pixels non affecté (bords droits & bas)
 # quand la taille de l'image n'est pas un multiple du scale
