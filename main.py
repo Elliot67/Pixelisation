@@ -12,6 +12,7 @@ args = parser.parse_args()
 
 name = args.image
 
+# Define output
 if not args.output:
 	output = name.replace('.', '_pixelate.')
 else:
@@ -20,10 +21,36 @@ else:
 img = cv2.imread(name, cv2.IMREAD_COLOR)
 height, width, channels = img.shape
 
+# Define scale
 if args.scale <= 0:
 	scale = math.ceil(min(height, width)/30)
 else:
 	scale = args.scale
+
+
+if (height % scale != 0) or (width % scale != 0):
+	print("The entire image cannot be totally Pixelate due to its dimension")
+	print("- Enter 0 to exit")
+	print("- Enter 1 to automatically resize the image")
+	print("- Enter 2 to automatically change the scale factor")
+	print("- Enter 3 to pixelate the possible part")
+	choice = input('Enter your choice and press enter : ')
+
+	if choice == '0':
+		raise SystemExit(0)
+	elif choice == '1':
+		# Redimensionne l'image
+		print('Choix 1')
+	elif choice == '2':
+		# Change the scale factor
+		# https://math.stackexchange.com/questions/715580/find-the-next-divisor-without-remainder
+		print('Choix 2')
+	elif choice == '3':
+		pass
+	else:
+		print('Not a valid option, default option: 3')
+
+## Fin vérification
 
 newHeight = int(height/scale)
 newWidth = int(width/scale)
@@ -55,6 +82,3 @@ cv2.imwrite(output, img)
 cv2.imshow(output,img)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
-
-# TODO: Possibilité de pixelisé les pixels non affecté (bords droits & bas)
-# quand la taille de l'image n'est pas un multiple du scale
