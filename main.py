@@ -27,8 +27,11 @@ if args.scale <= 0:
 else:
 	scale = args.scale
 
+remainderHeight = height % scale
+remainderWidth = width % scale
+print(remainderHeight, remainderWidth, scale)
 
-if (height % scale != 0) or (width % scale != 0):
+if (remainderHeight != 0) or (remainderWidth % scale != 0):
 	print("The entire image cannot be totally Pixelate due to its dimension")
 	print("- Enter 0 to exit")
 	print("- Enter 1 to automatically resize the image")
@@ -38,25 +41,23 @@ if (height % scale != 0) or (width % scale != 0):
 
 	if choice == '0':
 		raise SystemExit(0)
-	elif choice == '1':
-		# Redimensionne l'image
-		print('Choix 1')
-	elif choice == '2':
-		# Change the scale factor
+
+	elif choice == '1': # Resize the image
+		img = cv2.resize(img,(width + (scale - remainderWidth), height + (scale - remainderHeight)))
+		height, width, channels = img.shape
+
+	elif choice == '2': # Change the scale factor
 		# https://math.stackexchange.com/questions/715580/find-the-next-divisor-without-remainder
 		print('Choix 2')
+
 	elif choice == '3':
 		pass
 	else:
 		print('Not a valid option, default option: 3')
 
-## Fin vérification
 
 newHeight = int(height/scale)
 newWidth = int(width/scale)
-
-print(width, height)
-print(newWidth, newHeight)
 
 def moyenne(tab):
 	return int(round(sum(tab)/len(tab)))
